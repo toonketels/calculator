@@ -64,8 +64,29 @@ describe('calculator', function () {
 
 			_.each(tests, function(test) {
 				expect(calculator.calculate(test.in)).to.equal(test.out);
-			})
+			});
 		});
 
+		it('should be extendable', function() {
+			var tests = [
+				{ in: [4, "%", 3], out: 1 },
+				{ in: [5, "-", 7, "%", 5, "+", 5], out: 8 }
+			];
+
+			// Check our new operator does not yet exist
+			_.each(tests, function(test) {
+				expect(calculator.calculate(test.in)).to.be.false;
+			});
+
+			// Add it
+			calculator.addOperator("%", {
+				stage: 1,
+				operate: function(first, second) { return first % second; }
+			});
+
+			_.each(tests, function(test) {
+				expect(calculator.calculate(test.in)).to.equal(test.out);
+			});
+		});
 	});
 });
