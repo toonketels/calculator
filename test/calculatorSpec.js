@@ -55,5 +55,17 @@ describe('calculator', function () {
 			})
 		});
 
+		it('should operate on a sequence taking order into account', function() {
+			var tests = [
+				{ in: [2, "+", 3, "*", 2], out: 8 },
+				{ in: [2, "+", 3, "*", 2, "+", 10], out: 18 },
+				{ in: [2, "*", 3, "-", 2, "/", 2], out: 5 }
+			];
+
+			_.each(tests, function(test) {
+				expect(calculator.calculate(test.in)).to.equal(test.out);
+			})
+		});
+
 	});
 });
