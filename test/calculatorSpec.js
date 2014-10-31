@@ -67,6 +67,23 @@ describe('calculator', function () {
 			});
 		});
 
+		it('should return false when trying to divide by zero', function() {
+			var tests = [
+				{ in: [4, "/", 0], out: false },
+				{ in: [5, "-", 0, "*", 5, "/", 2, "+", 5, "/", 0], out: false }
+			];
+
+			// Check our new operator does not yet exist
+			_.each(tests, function(test) {
+				expect(calculator.calculate(test.in)).to.equal(test.out);
+			});
+		});
+
+	});
+
+
+	describe('#addOperator', function() {	
+
 		it('should be extendable', function() {
 			var tests = [
 				{ in: [4, "%", 3], out: 1 },
@@ -81,6 +98,25 @@ describe('calculator', function () {
 			// Add it
 			calculator.addOperator("%", {
 				stage: 1,
+				operate: function(first, second) { return first % second; }
+			});
+
+			_.each(tests, function(test) {
+				expect(calculator.calculate(test.in)).to.equal(test.out);
+			});
+		});
+
+		it('should allow a constraint to be passed', function() {
+			var tests = [
+				{ in: [4, "%", 3], out: 1 },
+				{ in: [5, "-", 7, "%", 5, "+", 5], out: false }
+			];
+
+			// Add it
+			calculator.addOperator("%", {
+				stage: 1,
+				// Guard disallows even numbers as first item
+				guard: function(first, second) { return first % 2 === 0; },
 				operate: function(first, second) { return first % second; }
 			});
 

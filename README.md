@@ -13,8 +13,16 @@ Basic calculator. Give it an array like [2, "+", 3, "*" 4] and returns the resul
 
 	// Extend it
 	calculator.addOperator("%", {
-		stage: 1,
+		stage  : 1,
 		operate: function(first, second) { return first % second; }
+	});
+
+	// Optionally define a guard to prevent illegal operations,
+	// return false to disallow an operation
+	calculator.addOperator("/", {
+		stage  : 1,
+		guard  : function guard(first, second) { return !(second === 0) },
+		operate: function divide(first, second) { return first / second }
 	});
 
 Operations included: *, /, +, -
